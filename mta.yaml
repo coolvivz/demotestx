@@ -1,0 +1,37 @@
+ID: TXDEMO
+_schema-version: '2.1'
+version: 0.0.1
+
+modules:
+ - name: dbtx
+   type: hdb
+   path: dbtx
+   requires:
+    - name: hdi_dbtx
+      properties:
+        TARGET_CONTAINER: ~{hdi-container-name}
+
+
+
+    - name: cross-container-service-1
+      group: SERVICE_REPLACEMENTS
+
+      properties:
+        key: ServiceName_1
+        service: ~{the-service-name}
+                          
+
+
+resources:
+ - name: hdi_dbtx
+   properties:
+      hdi-container-name: ${service-name}
+   type: com.sap.xs.hdi-container
+
+ - name: cross-container-service-1
+   parameters:
+      service-name: SFLIGHT
+   properties:
+      the-service-name: ${service-name}
+   type: org.cloudfoundry.existing-service
+
